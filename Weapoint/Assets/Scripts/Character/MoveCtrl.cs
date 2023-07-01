@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MoveCtrl : MonoBehaviour
 {
@@ -14,6 +16,9 @@ public class MoveCtrl : MonoBehaviour
     private Animator animator;
 
     [SerializeField]
+    private SpriteRenderer WeaponRenderer;
+
+    [SerializeField]
     private AnimationClip[] animations;
     private Rigidbody2D rb;
     private bool isFacingRight = false;
@@ -21,7 +26,7 @@ public class MoveCtrl : MonoBehaviour
     private bool CanAttack = true;
     private bool CanSkill = true;
     private bool CanGetDamage = true;
-    private string AttackType = "Sword";
+    public string AttackType = "Sword";
     private float AttackCool;
 
     public float moveSpeed = 5f;
@@ -73,6 +78,7 @@ public class MoveCtrl : MonoBehaviour
             StartCoroutine("SkillCooltime");
             Skill();
         }
+
     }
 
     private void Attack()
@@ -84,6 +90,10 @@ public class MoveCtrl : MonoBehaviour
                 AudioSource.PlayClipAtPoint(swordAttackSound, transform.position);
                 break;
             case "Dagger":
+                animator.SetTrigger("NormalAttack");
+                AudioSource.PlayClipAtPoint(swordAttackSound, transform.position);
+                break;
+            case "Axe":
                 animator.SetTrigger("NormalAttack");
                 AudioSource.PlayClipAtPoint(swordAttackSound, transform.position);
                 break;
@@ -104,7 +114,62 @@ public class MoveCtrl : MonoBehaviour
                 break;
             case "Bow":
                 break;
+            case "Axe":
+                ChargeAtk();
+                break;
         }
+    }
+    Color curColor;
+    private void ChargeAtk()
+    {
+
+        animator.SetTrigger("AxeCharge");
+        curColor = WeaponRenderer.color;
+        StartCoroutine("ChargeAtkCoroutine");
+    }
+    private IEnumerator ChargeAtkCoroutine()
+    {
+        float tmp1 = moveSpeed;
+        float tmp2 = jumpForce;
+        moveSpeed = 0f;
+        jumpForce = 0f;
+        float chargeValue = 1.0f;
+        float WaitTime = 0.0f;
+        CanGetDamage = false;
+        while (!Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            if (WaitTime > 1.2f)
+            {
+                break;
+            }
+            if(chargeValue > 0.0f)
+            {
+ 
+                chargeValue -= Time.deltaTime;
+                ChangeAxeColor(new Color(curColor.r, chargeValue, chargeValue));
+            }
+            WaitTime += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        moveSpeed = tmp1;
+        jumpForce = tmp2;
+        StartCoroutine("AxeSkill");
+
+
+    }
+    IEnumerator AxeSkill()
+    {
+        float Axeanim;
+        animator.SetTrigger("AxeSkill");
+        yield return new WaitForSeconds(0.01f);
+        Axeanim = animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(Axeanim);
+        CanGetDamage = true;
+        ChangeAxeColor(curColor);
+    }
+    private void ChangeAxeColor(Color color)
+    {
+        WeaponRenderer.color = color;
     }
     private bool isDashing = false;
     private float dashSpeed = 50f;
@@ -121,18 +186,17 @@ public class MoveCtrl : MonoBehaviour
     private IEnumerator DashCoroutine()
     {
         isDashing = true;
-
+        CanGetDamage = false;
         // 플레이어를 일정한 속도로 돌진하도록 설정
         Vector3 dashDirection = transform.right * -1f;
         float dashStartTime = Time.time;
-        Debug.Log(transform.right);
         while (Time.time - dashStartTime < dashDuration)
         {
             // 플레이어를 일정한 속도로 이동시킴
             transform.position += dashDirection * dashSpeed * Time.deltaTime;
             yield return null;
         }
-
+        CanGetDamage = true;
         isDashing = false;
     }
 

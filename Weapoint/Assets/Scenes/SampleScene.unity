@@ -246,6 +246,11 @@ PolygonCollider2D:
       - {x: 0.109375, y: -0.125}
       - {x: 0.109375, y: 0.4375}
   m_UseDelaunayMesh: 0
+--- !u!212 &509647444 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8684286160113322724, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
+  m_PrefabInstance: {fileID: 882172493}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,9 +770,11 @@ MonoBehaviour:
   swordSkillSound: {fileID: 8300000, guid: 6dd6db012183bbd4f95f18922e1f9d78, type: 3}
   daggerSkillSound: {fileID: 8300000, guid: 588376c6767769c4aa96326b7d570a31, type: 3}
   animator: {fileID: 1144132619}
+  WeaponRenderer: {fileID: 509647444}
   animations:
   - {fileID: 7400000, guid: f28f6b07698afa64788c223754b1f4ff, type: 2}
   - {fileID: 7400000, guid: 45bbd5bcac10f2248acbdb405a96904c, type: 2}
+  AttackType: Axe
   moveSpeed: 7.5
   attackSpeed: 7.5
   jumpForce: 5
