@@ -830,6 +830,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3833489038235787058, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
+      propertyPath: m_SortAtRoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3925810897588575111, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -881,6 +885,10 @@ PrefabInstance:
     - target: {fileID: 5742040261161864559, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5742040261161864559, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5777362919882476711, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
       propertyPath: m_Layer
@@ -1001,6 +1009,14 @@ PrefabInstance:
     - target: {fileID: 8153498479451471246, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8213217430464938783, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8213217430464938783, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8290592198848384514, guid: 1a2cb866a06247a49b163f7c59f61861, type: 3}
       propertyPath: m_Layer
@@ -1180,15 +1196,16 @@ MonoBehaviour:
   chargeAxeSound: {fileID: 8300000, guid: 85e2c78ffe102b5488bf0bc25851c3dd, type: 3}
   endChargeAxeSound: {fileID: 8300000, guid: 39accae0646b2bc419d98a1003f267bc, type: 3}
   hitAxeSound: {fileID: 8300000, guid: e1fb5d6dfa05ce0409bfd153f59fcd32, type: 3}
+  bowAttackSound: {fileID: 8300000, guid: d2c9b44d99dfa854fb79cc692324c392, type: 3}
   animator: {fileID: 1144132619}
   animations:
   - {fileID: 7400000, guid: f28f6b07698afa64788c223754b1f4ff, type: 2}
   - {fileID: 7400000, guid: 45bbd5bcac10f2248acbdb405a96904c, type: 2}
   WeaponRenderer: {fileID: 509647444}
   arrowPrefab: {fileID: 1653625743604901182, guid: ec8cdfe694bb1044c8bbe3ff815d03da, type: 3}
-  AttackType: Axe
-  moveSpeed: 7.5
-  attackSpeed: 7.5
+  AttackType: Bow
+  moveSpeed: 5
+  attackSpeed: 5
   jumpForce: 5
   SkillCool: 5
 --- !u!95 &1144132619 stripped

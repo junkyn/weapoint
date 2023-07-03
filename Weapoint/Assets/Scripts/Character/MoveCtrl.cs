@@ -19,6 +19,8 @@ public class MoveCtrl : MonoBehaviour
     private AudioClip endChargeAxeSound;
     [SerializeField]
     private AudioClip hitAxeSound;
+    [SerializeField]
+    private AudioClip bowAttackSound;
 
     [Header("애니메이션")]
     [SerializeField]
@@ -130,15 +132,27 @@ public class MoveCtrl : MonoBehaviour
                 AudioSource.PlayClipAtPoint(daggerSkillSound, transform.position);
                 break;
             case "Bow":
+                StartCoroutine("backStep");
+                shootArrow(arrowSpawnOffset - 0.35f);
+                shootArrow(arrowSpawnOffset - 0.25f);
                 break;
             case "Axe":
                 ChargeAtk();
                 break;
         }
     }
-    private void shootArrow()
+    IEnumerator backStep()
     {
-        Vector3 spawnPosition = transform.position + (transform.up*(arrowSpawnOffset-0.3f))+(transform.right * arrowSpawnOffset*-1);
+        float stepDistance = 1.2f;
+        Vector3 stepDestination = transform.position + transform.right * stepDistance;
+        animator.SetTrigger("BowSkill");
+        yield return new WaitForSeconds(0.2f);
+        transform.position = stepDestination;
+
+    }
+    private void shootArrow(float arrowOffset)
+    {
+        Vector3 spawnPosition = transform.position + (transform.up*(arrowOffset-0.3f))+(transform.right * -1);
         GameObject arrowObject = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
         Arrow arrow = arrowObject.GetComponent<Arrow>();
 
@@ -151,7 +165,8 @@ public class MoveCtrl : MonoBehaviour
     IEnumerator BowTerm()
     {
         yield return new WaitForSeconds(0.35f);
-        shootArrow();
+        AudioSource.PlayClipAtPoint(bowAttackSound, transform.position);
+        shootArrow(arrowSpawnOffset);
     }
     Color curColor;
     private void ChargeAtk()
