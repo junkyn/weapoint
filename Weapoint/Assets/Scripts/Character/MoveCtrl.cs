@@ -20,15 +20,19 @@ public class MoveCtrl : MonoBehaviour
     [SerializeField]
     private AudioClip hitAxeSound;
 
-    [Header(" ")]
+    [Header("애니메이션")]
     [SerializeField]
     private Animator animator;
-
-    [SerializeField]
-    private SpriteRenderer WeaponRenderer;
-
     [SerializeField]
     private AnimationClip[] animations;
+
+    [Header("무기")]
+    [SerializeField]
+    private SpriteRenderer WeaponRenderer;
+    [SerializeField]
+    private GameObject arrowPrefab;
+    private float arrowSpawnOffset = 1.0f;
+
     private Rigidbody2D rb;
     private bool isFacingRight = false;
     private bool isJumping = false;
@@ -106,9 +110,13 @@ public class MoveCtrl : MonoBehaviour
                 animator.SetTrigger("NormalAttack");
                 AudioSource.PlayClipAtPoint(swordAttackSound, transform.position);
                 break;
-
+            case "Bow":
+                animator.SetTrigger("BowAttack");
+                StartCoroutine("BowTerm");
+                break;
         }
     }
+
     private void Skill()
     {
         switch (AttackType)
@@ -127,6 +135,23 @@ public class MoveCtrl : MonoBehaviour
                 ChargeAtk();
                 break;
         }
+    }
+    private void shootArrow()
+    {
+        Vector3 spawnPosition = transform.position + (transform.up*(arrowSpawnOffset-0.3f))+(transform.right * arrowSpawnOffset*-1);
+        GameObject arrowObject = Instantiate(arrowPrefab, spawnPosition, Quaternion.identity);
+        Arrow arrow = arrowObject.GetComponent<Arrow>();
+
+        // 플레이어가 바라보는 방향에 따라 화살이 뒤집히도록 설정
+        if (isFacingRight)
+        {
+            arrow.Flip();
+        }
+    }
+    IEnumerator BowTerm()
+    {
+        yield return new WaitForSeconds(0.35f);
+        shootArrow();
     }
     Color curColor;
     private void ChargeAtk()
@@ -175,13 +200,10 @@ public class MoveCtrl : MonoBehaviour
     }
     IEnumerator AxeSkill()
     {
-        float Axeanim;
         animator.SetTrigger("AxeSkill");
-        yield return new WaitForSeconds(0.01f);
-        Axeanim = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(Axeanim-10*Time.deltaTime);
+        yield return new WaitForSeconds(0.2f);
         AudioSource.PlayClipAtPoint(hitAxeSound, transform.position);
-        yield return new WaitForSeconds(10*Time.deltaTime);
+        yield return new WaitForSeconds(0.15f);
         CanGetDamage = true;
         ChangeAxeColor(curColor);
     }
