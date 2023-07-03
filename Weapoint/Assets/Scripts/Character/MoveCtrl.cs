@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro.EditorUtilities;
@@ -133,21 +134,34 @@ public class MoveCtrl : MonoBehaviour
                 break;
             case "Bow":
                 StartCoroutine("backStep");
-                shootArrow(arrowSpawnOffset - 0.35f);
-                shootArrow(arrowSpawnOffset - 0.25f);
+
                 break;
             case "Axe":
                 ChargeAtk();
                 break;
         }
     }
+    
     IEnumerator backStep()
     {
-        float stepDistance = 1.2f;
-        Vector3 stepDestination = transform.position + transform.right * stepDistance;
+        float stepDuration = 0.2f;
+        float stepSpeed = 10f;
         animator.SetTrigger("BowSkill");
-        yield return new WaitForSeconds(0.2f);
-        transform.position = stepDestination;
+        Vector3 stepDirection = transform.right + transform.up * 0.6f ;
+        float stepStartTime = Time.time;
+        bool isShoot = false;
+        while (Time.time - stepStartTime < stepDuration)
+        {
+            // 플레이어를 일정한 속도로 이동시킴
+            if(!isShoot && Time.time - stepStartTime > 0.1f)
+            {
+                shootArrow(arrowSpawnOffset - 0.4f);
+                shootArrow(arrowSpawnOffset - 0.2f);
+                isShoot = true;
+            }
+            transform.position += stepDirection * stepSpeed * Time.deltaTime;
+            yield return null;
+        }
 
     }
     private void shootArrow(float arrowOffset)
