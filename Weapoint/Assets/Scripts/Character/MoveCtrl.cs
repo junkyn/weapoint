@@ -6,12 +6,21 @@ using UnityEngine.UIElements;
 
 public class MoveCtrl : MonoBehaviour
 {
+    [Header("È¿°úÀ½")]
     [SerializeField]
     private AudioClip swordAttackSound;
     [SerializeField]
     private AudioClip swordSkillSound;
     [SerializeField]
     private AudioClip daggerSkillSound;
+    [SerializeField]
+    private AudioClip chargeAxeSound;
+    [SerializeField]
+    private AudioClip endChargeAxeSound;
+    [SerializeField]
+    private AudioClip hitAxeSound;
+
+    [Header(" ")]
     [SerializeField]
     private Animator animator;
 
@@ -135,10 +144,12 @@ public class MoveCtrl : MonoBehaviour
         jumpForce = 0f;
         float chargeValue = 1.0f;
         float WaitTime = 0.0f;
+        bool chargeEnd = false;
         CanGetDamage = false;
+        AudioSource.PlayClipAtPoint(chargeAxeSound, transform.position);
         while (!Input.GetKeyUp(KeyCode.LeftShift))
         {
-            if (WaitTime > 1.2f)
+            if (WaitTime > 1.5f)
             {
                 break;
             }
@@ -147,6 +158,11 @@ public class MoveCtrl : MonoBehaviour
  
                 chargeValue -= Time.deltaTime;
                 ChangeAxeColor(new Color(curColor.r, chargeValue, chargeValue));
+            }
+            else if(chargeValue<=0.0f && !chargeEnd)
+            {
+                AudioSource.PlayClipAtPoint(endChargeAxeSound, transform.position);
+                chargeEnd = true;
             }
             WaitTime += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
@@ -163,7 +179,9 @@ public class MoveCtrl : MonoBehaviour
         animator.SetTrigger("AxeSkill");
         yield return new WaitForSeconds(0.01f);
         Axeanim = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(Axeanim);
+        yield return new WaitForSeconds(Axeanim-10*Time.deltaTime);
+        AudioSource.PlayClipAtPoint(hitAxeSound, transform.position);
+        yield return new WaitForSeconds(10*Time.deltaTime);
         CanGetDamage = true;
         ChangeAxeColor(curColor);
     }
