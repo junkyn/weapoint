@@ -22,6 +22,8 @@ public class MoveCtrl : MonoBehaviour
     private AudioClip hitAxeSound;
     [SerializeField]
     private AudioClip bowAttackSound;
+    [SerializeField]
+    private AudioClip backStepSound;
 
     [Header("애니메이션")]
     [SerializeField]
@@ -147,6 +149,7 @@ public class MoveCtrl : MonoBehaviour
         float stepDuration = 0.2f;
         float stepSpeed = 10f;
         animator.SetTrigger("BowSkill");
+        AudioSource.PlayClipAtPoint(backStepSound,transform.position);
         Vector3 stepDirection = transform.right + transform.up * 0.6f ;
         float stepStartTime = Time.time;
         bool isShoot = false;
