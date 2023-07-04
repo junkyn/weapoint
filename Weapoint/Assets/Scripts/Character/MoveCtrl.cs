@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 public class MoveCtrl : MonoBehaviour
 {
-    [Header("효과음")]
+    [Header("Effect Sound")]
     [SerializeField]
     private AudioClip swordAttackSound;
     [SerializeField]
@@ -25,13 +25,13 @@ public class MoveCtrl : MonoBehaviour
     [SerializeField]
     private AudioClip backStepSound;
 
-    [Header("애니메이션")]
+    [Header("Animation")]
     [SerializeField]
     private Animator animator;
     [SerializeField]
     private AnimationClip[] animations;
 
-    [Header("무기")]
+    [Header("Weapon")]
     [SerializeField]
     private SpriteRenderer WeaponRenderer;
     [SerializeField]
@@ -44,14 +44,17 @@ public class MoveCtrl : MonoBehaviour
     private bool CanAttack = true;
     private bool CanSkill = true;
     private bool CanGetDamage = true;
-    public string AttackType = "Sword";
+
     private float AttackCool;
 
+    [Header("Player Stat")]
+    public string AttackType = "Sword";
     public float moveSpeed = 5f;
     public float attackSpeed = 2.5f;
     public float jumpForce = 5f;
     public float SkillCool = 5f;
-
+    public float maxHp = 100f;
+    public float currentHp = 100f;
     // Start is called before the first frame update
     void Start()
     {
@@ -274,6 +277,7 @@ public class MoveCtrl : MonoBehaviour
 
     IEnumerator SkillCooltime()
     {
+        GetComponent<SkillCooltime>().setCooltime(SkillCool);
         CanSkill = false;
         yield return new WaitForSeconds(SkillCool);
         CanSkill = true;
