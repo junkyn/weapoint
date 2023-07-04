@@ -16,8 +16,8 @@ public class HPbar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float max = GetComponent<MoveCtrl>().maxHp;
-        float cur = GetComponent<MoveCtrl>().currentHp;
+        float max = GetComponent<MoveCtrl>().getMaxHp();
+        float cur = GetComponent<MoveCtrl>().getCurrentHp();
         hpBar.value = cur / max;
 
     }

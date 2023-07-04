@@ -48,19 +48,30 @@ public class MoveCtrl : MonoBehaviour
     private float AttackCool;
 
     [Header("Player Stat")]
-    public string AttackType = "Sword";
-    public float moveSpeed = 5f;
-    public float attackSpeed = 2.5f;
-    public float jumpForce = 5f;
-    public float SkillCool = 5f;
-    public float maxHp = 100f;
-    public float currentHp = 100f;
+    [SerializeField]
+    private string AttackType = "Sword";
+    [SerializeField]
+    private float moveSpeed = 5f;
+    [SerializeField]
+    private float attackSpeed = 2.5f;
+    [SerializeField]
+    private float jumpForce = 5f;
+    [SerializeField]
+    private float SkillCool = 5f;
+    [SerializeField]
+    private float maxHp = 100f;
+    [SerializeField]
+    private float currentHp = 100f;
+    [SerializeField]
+    private float power = 10f;
+    [SerializeField]
+    private int attackRange = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator.SetFloat("MovSpeed", moveSpeed / 5f);
-        animator.SetFloat("atkSpeed", attackSpeed / 5f);
+
     }
 
     // Update is called once per frame
@@ -301,5 +312,50 @@ public class MoveCtrl : MonoBehaviour
     {
         isFacingRight = !isFacingRight;
         transform.Rotate(0f, 180f, 0f);
+    }
+    
+    public void SetStat(int[] points)
+    {
+        maxHp = 20 + points[0];
+        moveSpeed = 2.5f + 0.05f * points[1];
+        power = 10f * (1f+(points[2] / 100f));
+        attackRange = points[3] / 10;
+        attackSpeed = 2.5f + 0.05f * points[4];
+        currentHp = maxHp;
+        AttackType = "Sword";
+        if (points[0] >= 60)
+        {
+
+        }
+        else if (points[1] >= 60)
+        {
+            
+        }
+        else if (points[2] >= 60)
+        {
+            AttackType = "Axe";
+            SkillCool = 6f;
+        }
+        else if (points[3] >= 60)
+        {
+            AttackType = "Bow";
+            SkillCool = 4f;
+        }
+        else if (points[4] >= 60)
+        {
+            AttackType = "Dagger";
+            SkillCool = 3f;
+        }
+        animator.SetFloat("MovSpeed", moveSpeed / 5f);
+        animator.SetFloat("atkSpeed", attackSpeed / 5f);
+
+    }
+    public float getMaxHp()
+    {
+        return maxHp;
+    }
+    public float getCurrentHp()
+    {
+        return currentHp;
     }
 }
