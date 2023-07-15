@@ -10,10 +10,12 @@ public class faceShot : MonoBehaviour
     private Rect screenshotArea;
     [SerializeField]
     private RawImage face;
+    [SerializeField]
+    private GameObject playerPrefab;
     // Start is called before the first frame update
     void Start()
     {
-        ScreenShot();
+    
     }
 
     // Update is called once per frame
@@ -21,7 +23,22 @@ public class faceShot : MonoBehaviour
     {
         
     }
-    void ScreenShot()
+    public void setFaceShot()
+    {
+
+        StartCoroutine("DoShot");
+    }
+    IEnumerator DoShot() // 바로 찍으면 눈이 잘림 ( 생성되면서 중력땜시 조금 떨어져서 그런가? )
+    {
+        GameObject temporaryLoc = GameObject.Find("forScreenshot");
+        GameObject Scaler = Instantiate(playerPrefab, temporaryLoc.transform.position, temporaryLoc.transform.rotation);
+        Scaler.transform.localScale = new Vector3(10f, 10f, 1);
+        temporaryLoc.SetActive(false);
+        yield return new WaitForSeconds(Time.deltaTime);
+        ScreenShot();
+        Destroy(Scaler);        
+    }
+    private void ScreenShot()
     {
         Texture2D texture = new Texture2D((int)screenshotArea.width, (int)screenshotArea.height, TextureFormat.RGB24, false);
 
